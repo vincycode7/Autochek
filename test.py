@@ -21,7 +21,7 @@ def build_argparser():
                             default="./model/prev_model",
                             help="path to the previous model check file.")
     
-    optional.add_argument("-dt", "--dta_type", required=False, type=str, 
+    optional.add_argument("-dt", "--data_type", required=False, type=str, 
                             default="valset",
                             help="Type of data to test with, ['trainset', 'testset' or 'valset'].")
     return parser
@@ -41,14 +41,17 @@ def main(args):
     
     # Load model from check point
     autochekmodel.load_model(args.model_checkpoint_file)
-            
+        
+    # load data
+    data_pipeline.load_splits(load_ordinary_processed_data=False, load_train_data=True, load_test_data=True, load_val_data=True)
+    
     # Test model
     # Transform Test data with pipeline from original data and normalizer from train data
-    data_pipeline.pipeline_transform(data="valset", steps='all', return_result=False, normalize=True)
+    data_pipeline.pipeline_transform(data=args.data_type, steps='all', return_result=False, normalize=True)
     output = autochekmodel.model_back_bone.predict(X=data_pipeline.currentX)
-    val_rmse = mean_squared_error(data_pipeline.currentY, output,squared=False,)
+    rmse = mean_squared_error(data_pipeline.currentY, output,squared=False,)
     # Output rmse for test data
-    print(f"Rmse for validation is: {val_rmse}")
+    print(f"Rmse is: {rmse}")
         
 
 if __name__ == "__main__":
