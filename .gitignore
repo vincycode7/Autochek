@@ -1,0 +1,19 @@
+# folders
+
+/data/__MACOSX/
+/data/docs copy/
+/data/processed/
+/__pycache__/*
+
+# extentions
+.DS_Store
+.env
+.vscode/
+
+# files
+Thumbs.db
+/data/docs copy.zip
+
+# exceptions
+!/data/docs copy/.gitkeep
+!/data/processed/.gitkeep
